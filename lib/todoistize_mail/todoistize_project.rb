@@ -1,6 +1,3 @@
-require 'todoist'
-include Todoist
-
 module TodoistizeMail
   class TodoistizeProject
     def initialize(apikey, project_name)
