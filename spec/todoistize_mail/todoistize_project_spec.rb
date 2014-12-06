@@ -5,8 +5,8 @@ describe TodoistizeMail::TodoistizeProject do
   let(:test_project_name) { 'test_peoject' }
 
   before do
-    expect(Base).to receive(:setup).with(apikey, false)
-    expect(Project).to receive(:all).and_return([project])
+    expect(Todoist::Base).to receive(:setup).with(apikey, true)
+    expect(Todoist::Project).to receive(:all).and_return([project])
   end
 
   describe '#uncomplete_tasks' do
@@ -19,7 +19,7 @@ describe TodoistizeMail::TodoistizeProject do
   describe '#create_task' do
     let(:content) { 'content' }
     let(:project) { double('test_peoject', name: test_project_name)  }
-    before { expect(Task).to receive(:create).with(content, project).and_return('ok') }
+    before { expect(Todoist::Task).to receive(:create).with(content, project).and_return('ok') }
     subject { described_class.new(apikey, test_project_name).create_task(content) }
     it { should eq 'ok' }
   end

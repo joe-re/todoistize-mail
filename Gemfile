@@ -8,6 +8,7 @@ gem 'thor'
 
 group :development do
   gem 'rspec'
+  gem 'rspec-its'
   gem 'guard-rspec'
 end
 
