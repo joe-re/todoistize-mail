@@ -14,5 +14,10 @@ module TodoistizeMail
     def create_task(content)
       Todoist::Task.create(content, @project)
     end
+
+    def exist?(content)
+      uncomplete_tasks.each { |task| return true if task.content =~ /^#{content}$/ }
+      false
+    end
   end
 end

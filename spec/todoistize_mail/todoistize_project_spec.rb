@@ -23,4 +23,22 @@ describe TodoistizeMail::TodoistizeProject do
     subject { described_class.new(apikey, test_project_name).create_task(content) }
     it { should eq 'ok' }
   end
+
+  describe '#exist?' do
+    let(:project) { double('test_peoject', name: test_project_name,  tasks: tasks)  }
+
+    context 'already exist' do
+      let(:content) { 'content' }
+      let(:tasks) { [double('test_task1', content: content)] }
+      subject { described_class.new(apikey, test_project_name).exist?(content) }
+      it { should eq true }
+    end
+
+    context 'not exist' do
+      let(:content) { 'none_content' }
+      let(:tasks) { [double('test_task1', content: 'content')] }
+      subject { described_class.new(apikey, test_project_name).exist?(content) }
+      it { should eq false }
+    end
+  end
 end
