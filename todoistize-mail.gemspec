@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = TodoistizeMail::VERSION
   spec.authors       = ['joe-re']
   spec.email         = ['joe.tialtngo@gmail.com']
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{allow you to integrate your mail into todoist.(required IMAP.)}
   spec.homepage      = ''
   spec.license       = 'MIT'
 
