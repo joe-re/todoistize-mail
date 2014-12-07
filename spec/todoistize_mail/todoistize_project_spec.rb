@@ -41,4 +41,22 @@ describe TodoistizeMail::TodoistizeProject do
       it { should eq false }
     end
   end
+
+  describe '#tosoistize?' do
+    let(:project) { double('test_peoject', name: test_project_name,  tasks: tasks)  }
+
+    context 'todoistized task' do
+      let(:target_task) { double('target_task', id: 1111) }
+      let(:tasks) { [target_task] }
+      subject { described_class.new(apikey, test_project_name).todoistize?(target_task) }
+      it { should eq true }
+    end
+
+    context 'not todoistized task' do
+      let(:target_task) { double('target_task', id: 9999) }
+      let(:tasks) { [double('test_task1', id: 1111)] }
+      subject { described_class.new(apikey, test_project_name).todoistize?(target_task) }
+      it { should eq false }
+    end
+  end
 end

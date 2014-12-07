@@ -19,5 +19,10 @@ module TodoistizeMail
       uncomplete_tasks.each { |task| return true if task.content =~ /^#{content}$/ }
       false
     end
+
+    def todoistize?(task)
+      uncomplete_tasks.each { |t| return true if task.id == t.id }
+      false
+    end
   end
 end

@@ -29,13 +29,15 @@ module TodoistizeMail
       unread_list.each_with_object([]) { |(_id, subject), subjects| subjects << subject }
     end
 
-    def to_read_already(subject)
+    def unread?(subject)
+      unread_list.each { |_id, unread_subject| return true if subject =~ /^#{unread_subject}$/ }
+      false
+    end
+
+    def mark_read(subject)
       target = unread_list.select { |_k, unread_subject| subject =~ /^#{unread_subject}$/ }
       return if target.count == 0
-      unless target.count == 1
-        puts "#{target.count} items: #{subject}"
-        return unless HighLine.new.agree('All items update to read already?( yes or no )')
-      end
+      yield target if block_given?
       @imap.select(MAILBOX_NAME)
       target.each { |id, _v| @imap.store(id, '+FLAGS', [:Seen]) }
     end

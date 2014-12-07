@@ -53,7 +53,36 @@ module TodoistizeMail
       end
     end
 
+    desc 'done', 'complete your task'
+    option_todoist_authentication
+    option_imap_authentication
+    method_option :todoist_project, type: :string, aliases: '-t', default: ENV['tize_project'], desc: 'todoistize project name'
+    method_option :task_id, type: :string, aliases: '-id', required: true, desc: 'todoist task id'
+    def done
+      Todoist::Base.setup(@options[:apikey], true)
+      task = Todoist::Task.get(@options[:task_id]).first
+      if task.nil? || task.checked != 0
+        puts "not found: #{@options[:task_id]}"
+        exit 0
+      end
+      todoist = TodoistizeMail::TodoistizeProject.new(@options[:apikey], @options[:todoist_project])
+      mark_read(task) if todoist.todoistize?(task)
+      Todoist::Task.complete(@options[:task_id])
+      puts 'done!'
+    end
+
     no_commands do
+      def mark_read(task)
+        h = HighLine.new
+        TodoistizeMail::Mailer.new(@options[:host], @options[:port], @options[:ssl]).login(@options[:user], @options[:password]) do |mailer|
+          return unless mailer.unread?(task.content)
+          return unless h.agree('This task is todoistized. mark read mail too?( yes or no )')
+          mailer.mark_read(task.content) do |target|
+            return unless h.agree("found #{target.count} items: #{task.content}\nyou mark all items to read?( yes or no )") unless target.count == 1
+          end
+        end
+      end
+
       class SortableTask
         attr_accessor :date, :pri, :task
         include Comparable
@@ -81,10 +110,11 @@ module TodoistizeMail
     private
 
     def print_task(task)
+      print "id:#{task.id}".ljust(16)
       print "pri:#{task.priority}".ljust(7)
       due_date = task.due_date ? Date.parse(task.due_date).strftime : 'none'
       print "date:#{due_date}".ljust(17)
-      print "#{task.content}".slice(0..50).ljust(50)
+      print "#{task.content}".slice(0..50).ljust(51)
       print "\n"
     end
   end
