@@ -66,7 +66,7 @@ module TodoistizeMail
       task = Todoist::Task.get(options(:task_id)).first
       if task.nil? || task.checked != 0
         puts "not found: #{options(:task_id)}"
-        ext 0
+        exit 0
       end
       todoist = TodoistizeMail::TodoistizeProject.new(options(:apikey), options(:project))
       mark_read(task) if todoist.todoistize?(task)
