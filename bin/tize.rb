@@ -2,5 +2,5 @@
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'todoistize_mail'
-TodoistizeMail::Cli.start
 
+TodoistizeMail::Cli.start

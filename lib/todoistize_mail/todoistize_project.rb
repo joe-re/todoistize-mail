@@ -2,8 +2,8 @@ module TodoistizeMail
   class TodoistizeProject
     def initialize(apikey, project_name)
       Todoist::Base.setup(apikey, true)
-      project = Todoist::Project.all.select { |p| p.name =~ /#{project_name}/ }
-      return if project.count <= 0 # ToDo: throw error
+      project = Todoist::Project.all.select { |p| p.name =~ /^#{project_name}$/ }
+      project = [Todoist::Base.get('/addProject', query: { name: project_name })] if project.count <= 0
       @project = project.first
     end
 

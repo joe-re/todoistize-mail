@@ -6,4 +6,5 @@ require 'todoistize_mail/todoistize_project'
 
 module TodoistizeMail
   include Todoist
+  YAML_PATH = "#{Dir.home}/.todoistize.yml"
 end
