@@ -18,9 +18,11 @@ module TodoistizeMail
     desc 'tasks', 'show your uncompleted tasks'
     option_todoist_authentication
     method_option :sort, type: :string, aliases: '-s', default: 'date,pri', desc: 'date: by due_date, pri: by priority'
+    method_option :show, type: :string, aliases: '-w', desc: 'target project name'
     def tasks
       Todoist::Base.setup(options(:apikey), true)
       Todoist::Project.all.each do |p|
+        next if options(:show) && !(p.name =~ /#{options(:show)}/)
         puts "-- Project: #{p.name} --"
         puts 'Completed!' if p.tasks.count == 0
         sort_task(p.tasks).each { |task| print_task task }
