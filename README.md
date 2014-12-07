@@ -5,8 +5,8 @@ todoistize-mail is allow you to integrate your mail into todoist.(required IMAP.
 
 ## Installation
 
-```ruby
-gem 'todoistize-mail'
+```
+gem install todoistize-mail
 ```
 
 ### setup
