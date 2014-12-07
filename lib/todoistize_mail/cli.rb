@@ -35,6 +35,24 @@ module TodoistizeMail
       end
     end
 
+    desc 'todoistize mail', 'import your unread mails into todoist'
+    option_todoist_authentication
+    option_imap_authentication
+    method_option :todoist_project, type: :string, aliases: '-t', default: ENV['tize_project'], desc: 'todoistize project name'
+    def todoistize
+      todoist = TodoistizeMail::TodoistizeProject.new(@options[:apikey], @options[:todoist_project])
+      TodoistizeMail::Mailer.new(@options[:host], @options[:port], @options[:ssl]).login(@options[:user], @options[:password]) do |mailer|
+        mailer.unread_subjects.each do |subject|
+          if todoist.exist?(subject)
+            puts "already exist: #{subject}"
+            next
+          end
+          todoist.create_task(subject)
+          puts "register: #{subject}"
+        end
+      end
+    end
+
     no_commands do
       class SortableTask
         attr_accessor :date, :pri, :task
