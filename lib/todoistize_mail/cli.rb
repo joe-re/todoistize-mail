@@ -30,9 +30,9 @@ module TodoistizeMail
     desc 'unread', 'show your unread mails'
     option_imap_authentication
     def unread
-      imap = TodoistizeMail::Mailer.new(@options[:host], @options[:port], @options[:ssl])
-      imap.login(@options[:user], @options[:password])
-      puts imap.unread_subjects
+      TodoistizeMail::Mailer.new(@options[:host], @options[:port], @options[:ssl]).login(@options[:user], @options[:password]) do |mailer|
+        puts mailer.unread_subjects
+      end
     end
 
     no_commands do

@@ -13,6 +13,10 @@ module TodoistizeMail
 
     def login(user, passwd)
       @imap.login(user, passwd)
+      if block_given?
+        yield self
+        logout
+      end
       self
     end
 
